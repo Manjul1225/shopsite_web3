@@ -1,0 +1,44 @@
+import { serviceCategories } from "@/lib/consts"
+import { useMatterMarket } from "@/providers/MatterMarketProvider"
+import useIsMobile from "../../../../hooks/useIsMobile"
+import Select from "../../../../shared/Select"
+
+const Navbar = () => {
+  const { selectedNav, setSelectedNav, categories } = useMatterMarket()
+
+  const isMobile = useIsMobile()
+  return (
+    <div>
+      {isMobile ? (
+        <div className="px-[18px] py-[10px] mt-[20px]">
+          <p className="text-[12px] leading-[100%] tracking-[-0.3px] text-gray_6 mb-[10px]">
+            Service Type
+          </p>
+          <Select
+            value={selectedNav}
+            onChange={(e) => setSelectedNav(e.target.value)}
+            options={serviceCategories}
+          />
+        </div>
+      ) : (
+        <div className="flex justify-between">
+          {categories.map((item) => (
+            <button
+              type="button"
+              key={item.value}
+              className={`py-[20px] px-[24px] flex justify-center items-center
+                  cursor-pointer text-gray_6 text-[16px] ${
+                    item.value === selectedNav ? "border-b-[2px] border-b-black !text-black" : ""
+                  }`}
+              onClick={() => setSelectedNav(item.value)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default Navbar
