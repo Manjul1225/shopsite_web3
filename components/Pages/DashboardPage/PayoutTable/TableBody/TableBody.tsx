@@ -1,14 +1,19 @@
+import useConnectedWallet from "@/hooks/useConnectedWallet"
+import usePayoutActivity from "@/hooks/usePayoutActivity"
 import TableRow from "../TableRow"
 
-const TableBody = () => (
-  <tbody>
-    {Array(10)
-      .fill(0)
-      .map((_, i) => (
+const TableBody = () => {
+  const { connectedWallet } = useConnectedWallet()
+  const { payoutActivity } = usePayoutActivity(connectedWallet)
+
+  return (
+    <tbody>
+      {payoutActivity.map((_, i) => (
         // eslint-disable-next-line react/no-array-index-key
-        <TableRow key={i} />
+        <TableRow key={i} transaction={_} />
       ))}
-  </tbody>
-)
+    </tbody>
+  )
+}
 
 export default TableBody

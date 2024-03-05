@@ -1,10 +1,9 @@
 import { AreaChart, Area, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
 import { useMeasure } from "react-use"
-import { chartData } from "./data"
 import XAxisTick from "./XAxisTick"
 import YAxisTick from "./YAxisTick"
 
-const TransactionChart = () => {
+const TransactionChart = ({ chartData }) => {
   const [containerRef, { height }] = useMeasure()
 
   return (
@@ -13,7 +12,7 @@ const TransactionChart = () => {
         <AreaChart
           height={height - 40}
           data={chartData}
-          margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+          margin={{ top: 5, right: 45, bottom: 5, left: 55 }}
         >
           <defs>
             <linearGradient id="color-gradient-uv" x1="0" y1="0" x2="0" y2="1">
@@ -44,7 +43,8 @@ const TransactionChart = () => {
             padding={{ top: 0, bottom: 0 }}
             axisLine={false}
             tickLine={false}
-            tick={<YAxisTick data={chartData} />}
+            tick={<YAxisTick data={Math.max(...chartData.map((d) => d.uv))} />}
+            tickFormatter={(value) => `$${value}`}
           />
         </AreaChart>
       </ResponsiveContainer>
