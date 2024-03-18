@@ -8,7 +8,7 @@ import useIsMobile from "../../../hooks/useIsMobile"
 
 const ServicesPage = () => {
   const isMobile = useIsMobile()
-  const { filteredProducts } = useMatterMarket()
+  const { filteredProducts, subCategoryLabel } = useMatterMarket()
 
   return (
     <Layout type="base">
@@ -32,7 +32,7 @@ const ServicesPage = () => {
           className="text-[16px] md:text-[28px] leading-[120%] tracking-[-0.168px] text-gray_8 text-left pt-[20px]
         border-t border-t-gray_3 px-[18px]"
         >
-          All Services
+          {subCategoryLabel} Services
         </p>
         <div className="w-full grid grid-cols-2 md:grid-cols-5 gap-[40px] mt-[40px] px-[18px]">
           {filteredProducts.map((product, i) => (

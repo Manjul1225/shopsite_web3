@@ -20,7 +20,6 @@ const useSales = (wallet: string, selectedPeriod: string) => {
         }
       }
     }
-
     init()
   }, [selectedPeriod, wallet])
 

@@ -1,5 +1,5 @@
 import useUsdc from "@/hooks/useUsdc"
-import { formatEther } from "ethers/lib/utils"
+import { formatUnits } from "viem"
 
 const Balance = () => {
   const { balance } = useUsdc()
@@ -13,7 +13,7 @@ const Balance = () => {
       >
         <div className="flex items-center gap-x-[10px]">
           <p className="text-[56px] md:text-[70px] leading-[110%] tracking-[-1.75px]">
-            {parseFloat(formatEther(balance ?? 0)).toFixed(2)}
+            {balance ? parseFloat(formatUnits(balance.toBigInt(), 6)).toFixed(2) : "0.00"}
           </p>
           <p className="text-[18px] leading-[28px]">USDC</p>
         </div>

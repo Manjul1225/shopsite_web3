@@ -9,7 +9,7 @@ import {
 } from "@/lib/consts"
 import createProduct from "@/lib/firebase/createProduct"
 import { uploadToIpfs } from "onchain-magic"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useUserProvider } from "@/providers/UserProvider"
 
 const useDeployData = () => {
@@ -36,6 +36,7 @@ const useDeployData = () => {
       CHAIN_ID,
       productName,
       productDescription,
+      parseFloat(priceInUsd) * 10 ** 6,
       totalSupply,
     )
     const { error } = response as any
@@ -78,18 +79,24 @@ const useDeployData = () => {
   const getCategoryOptions = (type) => {
     switch (type) {
       case "Physical":
-        setProductCategory(physicalCategories[0].value)
         return physicalCategories
       case "Digital":
-        setProductCategory(digitalCategories[0].value)
         return digitalCategories
       case "Service":
-        setProductCategory(serviceCategories[0].value)
         return serviceCategories
       default:
         return []
     }
   }
+
+  useEffect(() => {
+    const categoryMap = {
+      Physical: physicalCategories[0].value,
+      Digital: digitalCategories[0].value,
+      Service: serviceCategories[0].value,
+    }
+    setProductCategory(categoryMap[productType] || "")
+  }, [productType])
 
   return {
     cover,

@@ -30,9 +30,7 @@ function Select({
   disabled,
 }: ISelect) {
   const formContext = useFormContext()
-
   const isFullyHooked = name && hookToForm && formContext
-
   const fieldError = isFullyHooked && formContext?.formState?.errors?.[name]
 
   return (
@@ -47,8 +45,8 @@ function Select({
         ${className ? className : ""} ${
           hookToForm && fieldError && fieldError?.message ? "border-red-600" : ""
         }`}
+        value={value}
         {...(!hookToForm && {
-          value: value,
           onChange: onChange,
         })}
         {...(isFullyHooked

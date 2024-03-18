@@ -5,6 +5,7 @@ import getProductsByType from "@/lib/firebase/getProductsByType"
 const useMatterMarketData = (type) => {
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
+  const [subCategoryLabel, setSubCategoryLabel] = useState("")
 
   const allNav = {
     label: "ALL",
@@ -18,6 +19,11 @@ const useMatterMarketData = (type) => {
     if (type === "Physical") return [allNav, ...physicalCategories]
     return []
   }, [type])
+
+  useEffect(() => {
+    const label = categories.filter((category) => category.value === selectedNav)
+    setSubCategoryLabel(selectedNav === "ALL" ? `All ${type}` : label[0].label)
+  }, [categories, selectedNav])
 
   useEffect(() => {
     const init = async () => {
@@ -45,6 +51,7 @@ const useMatterMarketData = (type) => {
     selectedNav,
     filteredProducts,
     setFilteredProducts,
+    subCategoryLabel,
   }
 }
 

@@ -5,7 +5,8 @@ const createCart = async (cartData) => {
   const data = {
     ...cartData,
     purchased: false,
-    timestamp: Date.now(),
+    createdAt: Date.now(),
+    purchasedAt: null,
   }
 
   const q = query(
