@@ -1,14 +1,14 @@
-import { useDashboard } from "@/providers/DashboardProvider"
+import { useTable } from "@/providers/TableProvider"
 import TableRow from "../TableRow"
 
 const TableBody = () => {
-  const { orders } = useDashboard()
+  const { rows } = useTable()
 
   return (
     <tbody>
-      {orders.map((order) => (
+      {rows.map((data) => (
         // eslint-disable-next-line react/no-array-index-key
-        <TableRow key={order.id} data={order} />
+        <TableRow key={data.id} data={data} />
       ))}
     </tbody>
   )

@@ -1,13 +1,26 @@
 import { AreaChart, Area, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
 import { useMeasure } from "react-use"
+import { useMemo } from "react"
 import XAxisTick from "./XAxisTick"
 import YAxisTick from "./YAxisTick"
 
 const TransactionChart = ({ chartData }) => {
   const [containerRef, { height }] = useMeasure()
+  const yMaxValue = Math.max(...chartData.map((d) => d.uv))
+  const yAxisCount = 4
+
+  const ticks = useMemo(() => {
+    if (yMaxValue)
+      return [
+        ...Array(yAxisCount + 1)
+          .fill(0)
+          .map((_, index) => parseInt(Number((yMaxValue / yAxisCount) * index).toFixed(2), 10)),
+      ]
+    return []
+  }, [yMaxValue])
 
   return (
-    <div className="h-[300px] w-full mt-[20px]" ref={containerRef}>
+    <div className="h-[350px] w-full mt-[20px]" ref={containerRef}>
       <ResponsiveContainer width="100%" height={height}>
         <AreaChart
           height={height - 40}
@@ -36,15 +49,14 @@ const TransactionChart = ({ chartData }) => {
             tickLine={false}
           />
           <YAxis
-            tickCount={4}
-            domain={[0, 300]}
-            interval={0}
+            tickCount={yAxisCount}
+            domain={[0, yMaxValue]}
             tickMargin={0}
             padding={{ top: 0, bottom: 0 }}
             axisLine={false}
             tickLine={false}
-            tick={<YAxisTick data={Math.max(...chartData.map((d) => d.uv))} />}
-            tickFormatter={(value) => `$${value}`}
+            ticks={ticks}
+            tick={<YAxisTick data={yMaxValue} />}
           />
         </AreaChart>
       </ResponsiveContainer>

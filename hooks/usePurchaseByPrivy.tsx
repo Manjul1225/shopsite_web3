@@ -48,8 +48,15 @@ const usePurchaseByPrivy = () => {
         return
       }
 
+      const cartIds = cart.map((item) => item.id)
+
       toast.success("purchased!")
-      push("/checkout/success")
+      push({
+        pathname: "/checkout/success",
+        query: {
+          purchasedCart: JSON.stringify(cartIds),
+        },
+      })
     } catch (err) {
       handleTxError(err)
     }

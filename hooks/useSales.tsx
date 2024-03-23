@@ -1,27 +1,21 @@
 import { useState, useEffect } from "react"
-import getAssetTransfers from "@/lib/getAssetTransfers"
 import getStartDate from "@/lib/getStartDate"
 
-const useSales = (wallet: string, selectedPeriod: string) => {
+const useSales = (salesData, selectedPeriod: string) => {
   const [sales, setSales] = useState([])
 
   useEffect(() => {
     const init = async () => {
-      if (wallet) {
+      if (salesData) {
         const startDate = getStartDate(selectedPeriod)
-        const transferType = "sales"
-
-        const salesData = await getAssetTransfers(transferType, wallet)
-        if (salesData) {
-          const filteredSalesData = salesData.filter(
-            (one) => new Date(one.metadata.blockTimestamp).getTime() >= startDate,
-          )
-          setSales(filteredSalesData)
-        }
+        const filteredSalesData = salesData.filter(
+          (item) => new Date(item.purchasedAt).getTime() >= startDate,
+        )
+        setSales([...filteredSalesData])
       }
     }
     init()
-  }, [selectedPeriod, wallet])
+  }, [selectedPeriod, salesData])
 
   return {
     sales,

@@ -51,7 +51,7 @@ const EditAccount = () => {
         )}
       </div>
       <p className="text-[28px] tracking-[-0.4px] font-[400] leading-[100%] mt-[24px] text-black">
-        {userData?.business.businessName}
+        {userData?.business?.businessName}
       </p>
       <p className="text-[16px] tracking-[-0.4px] font-[400] leading-[100%] mt-[24px] text-black">
         {userData?.userName}
@@ -60,7 +60,7 @@ const EditAccount = () => {
         {userData?.privyEmail}
       </p>
       <p className="text-[16px] tracking-[-0.4px] font-[400] leading-[100%] mt-[24px] text-black">
-        {userData?.business.website}
+        {userData?.business?.website}
       </p>
       <button
         type="button"

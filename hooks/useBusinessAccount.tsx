@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { toast } from "react-toastify"
 
 const useBusinessAccount = ({ setLoading }) => {
-  const { userData } = useUserProvider()
+  const { userData, getUserData } = useUserProvider()
   const [isEditableEmail, setIsEditableEmail] = useState(false)
   const [emailForVerify, setEmailForVerify] = useState(false)
   const [verifyCode, setVerifyCode] = useState("")
@@ -17,16 +17,23 @@ const useBusinessAccount = ({ setLoading }) => {
 
   const handleCreateBusinessAccount = async () => {
     setLoading(true)
-    await createBusinessAccount(
+
+    const response = (await createBusinessAccount(
       {
         businessName: publicBusinessName,
         website: businessSite,
         customerId: userData?.id,
-        agreeToPrivacyAndTerms: true,
-        marketingSelected: true,
+        agreeToPrivacyAndTerms: isApprovedPrivacy,
+        marketingSelected: isAgreeForUpdate,
       },
       userData?.id,
-    )
+    )) as any
+    const { error } = response
+    if (error) {
+      setLoading(false)
+      return
+    }
+    await getUserData()
     toast.success("Successfully applied. Typical review time: 2-3 Days.")
     push("/dashboard")
     setLoading(false)

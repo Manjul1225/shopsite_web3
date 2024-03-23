@@ -10,11 +10,12 @@ const YAxisTick = ({ y, data, index, visibleTicksCount }: any) => {
   if (index === visibleTicksCount - 1) {
     value = data
   }
+
   return (
-    <g className="duration-700" transform={`translate(${55},${y - 10})`} height={150}>
+    <g className="duration-700" transform={`translate(${55}, ${y - 10})`} height={200}>
       <text x="0" y="0" height={22} fill="#A2A3A5" textAnchor="middle">
         <tspan x="0" dy="1.2em" fontSize={12} fontFamily="Poppins">
-          {`$${value}`}
+          {`$${value.toFixed(2)}`}
         </tspan>
       </text>
     </g>

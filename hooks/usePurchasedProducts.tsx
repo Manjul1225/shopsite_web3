@@ -1,20 +1,25 @@
-import getLatestPurchasedItems from "@/lib/firebase/getLatestPurchasedItems"
-import { useUserProvider } from "@/providers/UserProvider"
+import getProductsByCartIds from "@/lib/firebase/getProductsByCartIds"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
 const usePurchasedProducts = () => {
-  const { userData } = useUserProvider()
   const [purchasedList, setPurchasedList] = useState([])
+  const { query } = useRouter() as any
 
   useEffect(() => {
     const init = async () => {
-      const response = await getLatestPurchasedItems(userData?.id)
-      setPurchasedList(response)
+      try {
+        const purhcasedCart = JSON.parse(query?.purchasedCart)
+        const response = await getProductsByCartIds(purhcasedCart)
+        setPurchasedList(response.filter((item) => item))
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      }
     }
-
-    if (!userData) return
+    if (!query?.purchasedCart) return
     init()
-  }, [userData])
+  }, [query])
 
   return {
     purchasedList,

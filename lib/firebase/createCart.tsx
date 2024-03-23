@@ -11,7 +11,11 @@ const createCart = async (cartData) => {
 
   const q = query(
     collection(db, "carts"),
-    and(where("productId", "==", cartData.productId), where("buyerId", "==", cartData.buyerId)),
+    and(
+      where("productId", "==", cartData.productId),
+      where("buyerId", "==", cartData.buyerId),
+      where("purchased", "==", false),
+    ),
   )
   const querySnapshot = await getDocs(q)
 

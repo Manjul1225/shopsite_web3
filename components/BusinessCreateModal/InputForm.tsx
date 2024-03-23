@@ -90,7 +90,7 @@ const InputForm = () => {
             w-full py-[15px] text-white"
         disabled={loading || (!isAgreeForUpdate && !isApprovedPrivacy)}
       >
-        Apply Now
+        {loading ? "Applying..." : "Apply Now"}
       </button>
     </Form>
   )

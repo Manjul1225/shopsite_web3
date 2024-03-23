@@ -1,40 +1,29 @@
-import { formatEther } from "ethers/lib/utils"
 import useIsMobile from "@/hooks/useIsMobile"
 import truncateEthAddress from "@/lib/truncatedEthAddress"
-import { IS_TESTNET } from "@/lib/consts"
+import getChainNetwork from "@/lib/getChainNetwork"
+import { CHAIN_ID } from "@/lib/consts"
+import getDateString from "@/lib/getDateString"
+import getTimeString from "@/lib/getTimeString"
+import getLocalTimeZone from "@/lib/getLocalTimeZone"
+import { formatUnits } from "viem"
 
-const TableRow = ({ transaction }) => {
+const TableRow = ({ data }) => {
   const isMobile = useIsMobile()
-
   const itemClasses = `md:px-[20px] md:py-[16px] text-gray_7 text-[12px] leading-[16px] p-[10px] border border-gray_1`
 
-  const blockTimestamp = transaction?.metadata.blockTimestamp
-  const amount = parseFloat(formatEther(transaction?.rawContract.value ?? 0)).toFixed(2)
-  const hash = transaction?.hash
-  const explorer = IS_TESTNET
-    ? `https://goerli-optimism.etherscan.io/tx/${hash}`
-    : `https://basescan.org/tx/${hash}`
+  const { hash: transactionHash, rawContract, metadata } = data
+  const amount = parseFloat(formatUnits(BigInt(rawContract?.value || 0), 6))
+  const blockTimestamp = metadata?.blockTimestamp
 
-  function formatDate(dateString: any): string {
-    const date = new Date(dateString)
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hourCycle: "h23", // Use PM instead of AM
-      hour12: true,
-      timeZoneName: "short", // Abbreviated Time Zone Name
-    }
-    return date.toLocaleString("en-US", options)
+  const handleOpenTx = () => {
+    const chain = getChainNetwork(CHAIN_ID)
+    const explorer = chain.blockExplorers.default.url
+    const href = `${explorer}/tx/${transactionHash}`
+    window.open(href, "_blank")
   }
-
-  const timestamp = formatDate(blockTimestamp)
-  const timestampDate = timestamp.split(",")[0]
-  const timestampTime = timestamp.split(",")[1].split(" ")[1]
-  const timestampZone = timestamp.split(",")[1].split(" ")[2]
+  const timestampDate = getDateString(blockTimestamp)
+  const timestampTime = getTimeString(blockTimestamp)
+  const timestampZone = getLocalTimeZone()
 
   return (
     <tr>
@@ -48,7 +37,9 @@ const TableRow = ({ transaction }) => {
             {timestampZone}
           </>
         ) : (
-          timestamp
+          <>
+            {timestampDate} {timestampTime} {timestampZone}
+          </>
         )}
       </td>
       <td className={itemClasses}>
@@ -61,9 +52,9 @@ const TableRow = ({ transaction }) => {
         )}
       </td>
       <td className={`${itemClasses} !text-link`}>
-        <a target="_blank" href={explorer} rel="noreferrer">
-          {isMobile ? truncateEthAddress(hash) : hash}
-        </a>
+        <button type="button" onClick={handleOpenTx}>
+          {isMobile ? truncateEthAddress(transactionHash) : transactionHash}
+        </button>
       </td>
       <td className={itemClasses}>
         <p className="text-[12px] leading-[16px]">Successful</p>
