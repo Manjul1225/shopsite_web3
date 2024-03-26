@@ -2,7 +2,6 @@ import Image from "../../../shared/Image"
 import Icon from "../../../shared/Icon"
 import useIsMobile from "../../../hooks/useIsMobile"
 import { useCheckOut } from "../../../providers/CheckOutProvider"
-import CreditCardPayButton from "../../CreditCardPayButton"
 import usePurchaseByPrivy from "../../../hooks/usePurchaseByPrivy"
 
 const CheckOutCard = () => {
@@ -53,13 +52,6 @@ const CheckOutCard = () => {
             />
             <p className="text-white text-[16px] font-[400] leading-[120%]">Pay with Crypto</p>
           </button>{" "}
-          <p
-            className="text-black text-[16px] font-[400] leading-[150%] tracking-[-0.684px]
-            text-center my-[20px]"
-          >
-            Or
-          </p>
-          <CreditCardPayButton cart={liveCart} totalPrice={totalPrice} />
         </div>
       </div>
     </div>
